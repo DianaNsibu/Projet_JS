@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Exo JS</title>
+        <style>
+            .odometer {
+                font-size: 100px !important;
+            }
+        </style>        
+        <style>
+            * {
+                font-family: Arial, sans-serif;
+            }
+
+            table {
+                border-collapse: collapse;
+                width: 400px;
+            }
+
+            th {
+                text-align: left;
+                background-color: #000000;
+                color: #fff;
+                padding: 10px;
+            }
+
+            td {
+                padding: 10px;
+            }
+
+            tr:nth-of-type(even) {
+                background-color: #ccc;
+            }
+
+            .win {
+                background-color: #1cdb65;
+                color: white;
+            }
+
+            .loss {
+                background-color: #c70d0d;
+                color: white;
+            }
+        </style>                            
+    </head>
+
+    <body>
+        <h1>Slot Machine</h1>
+
+        <p>
+            <span class="odometer"></span>
+        </p>
+
+        <p>
+            <button id="luck">Lucky!</button>
+            <button id="reset">Reset</button>
+        </p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Coup N°</th>
+                    <th>Résultat</th>
+                    <th>Argent</th>
+                    <th>Gain &amp; Perte</th>
+                </tr>
+            </thead>
+
+            <tbody></tbody>
+
+            <tfoot></tfoot>
+        </table>
+        <script>
+            var nb1 ; var nb2 ; var nb3;var total;
+            var tbody = document.querySelector('tbody');
+            var money = 10;
+            var totalCoup = 10;
+            var coup = 1;
+            var gain;
+            var resultat;
+            var odo = document.querySelector('span');
+            var lucky = document.getElementById('luck');
+            var reset = document.getElementById('reset');
+
+            lucky.addEventListener('click',function(){
+                if(totalCoup > 0 && money >0){
+                    nb1 = Math.floor(Math.random() * 7)+1;
+                    nb2= Math.floor(Math.random() * 7)+1;
+                    nb3= Math.floor(Math.random() * 7)+1;
+                    total = String(nb1) + String(nb2) + String(nb3);
+                    odo.innerHTML = total;
+
+                    if(total == '777'){
+                        money += 10; 
+                        gain = 10;
+                    }else if(total == '123'){
+                        money += 5; 
+                        gain= 5;
+                    }else if(total == '111'){
+                        money += 2 ;
+                        gain = 2;
+                    }else{
+                        money -= 1;
+                        gain = -1;
+                    }
+
+                    /*la ligne et son contenu*/
+                    var tr = document.createElement('tr');
+                    var td1 = document.createElement('td');
+                    td1.innerHTML = coup;
+                    var td2 = document.createElement('td');
+                    td2.innerHTML = total;
+                    var td3 = document.createElement('td');
+                    td3.innerHTML= money;
+                    var td4 = document.createElement('td');
+                    if(gain == -1){
+                        td4.className = "loss";
+                    }else{
+                        td4.className="win";
+                    }
+                    td4.innerHTML = gain;
+                    
+                    tr.appendChild(td1);
+                    tr.appendChild(td2);
+                    tr.appendChild(td3);
+                    tr.appendChild(td4);
+
+                    tbody.appendChild(tr);
+
+                    totalCoup -- ;
+                    coup += 1;
+                }
+
+            });
+            reset.addEventListener('click',function(){
+                coup = 1 ;
+                money = 10;
+                totalCoup = 10;
+                
+                var mesTd = document.querySelectorAll('td');
+                var mesTr = document.querySelectorAll('tr');
+                for(var i = 0 ; i < mesTd.length; i++){ 
+                    mesTd[i].remove();
+                    for(var j=0;j<mesTr.length; j++){
+                        mesTr[j].remove();
+                    }
+                }
+                
+            });
+            
+           
+        </script>
+    </body>
+</html>

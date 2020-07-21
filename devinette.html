@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Exo JS</title>
+        <script>
+
+        </script>
+        <style>
+            td {
+                width: 50px;
+                height: 50px;
+                background-color: #ccc;
+                padding: 0;
+            }
+
+            .wrong { background-color: #ff0000; }
+            .close { background-color: #e6c613; }
+            .correct { background-color: #16eb91; }
+        </style>
+    </head>
+
+    <body>
+        <h1>Devinez la bonne position</h1>
+
+        <p id="info"></p>
+
+        <button>Nouvelle Partie</button>
+
+        <table>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>            
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>            
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>            
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>            
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+
+        <script>
+            var info = document.getElementById('info');
+            var button = document.querySelector('button');
+            var tableau = document.querySelector('table');
+            var mesTd = document.querySelectorAll('td');
+            var ArrayTd = Array.from(mesTd);
+
+            /*la bonne case */
+            var randomNb = Math.floor(Math.random() * ArrayTd.length);
+            var winCase =ArrayTd[randomNb];
+            var compteur = 5 ; 
+
+            tableau.addEventListener('click', function(e){
+                compteur -- ;
+
+                if(compteur >= 0){
+
+                    if(e.target == winCase){
+                        winCase.className = 'correct';
+                        info.textContent = "Vous avez gagné la partie !";
+                        tableau.removeEventListener('click', function(e){});
+
+                    }
+                    else if(e.target == ArrayTd[(randomNb + 1)] || e.target == ArrayTd[(randomNb + 2)] || e.target == ArrayTd[(randomNb - 1)] || e.target == ArrayTd[(randomNb - 2)]){
+                        e.target.className = "close";
+                        info.textContent = "Vous y êtes presque, encore " + compteur+" essaies !";
+
+                    }
+                    else{
+                        e.target.className = "wrong";
+                        info.textContent = "Encore " + compteur + " essaies !  "
+
+                    } 
+
+
+                }else{
+                    info.textContent = "Vous avez perdu ! "
+                }
+
+
+            }); 
+
+            button.addEventListener('click',reset());
+0000000000000000000
+            function reset (){
+                compteur = 5 ;
+                randomNb = Math.floor(Math.random() * ArrayTd.length);
+                winCase =ArrayTd[randomNb];
+
+                for(let i = 0 ; i <= ArrayTd.length ; i++){
+                    ArrayTd[i].className = ""; 
+                } 
+            }
+
+
+
+        </script>
+    </body>
+</html>
