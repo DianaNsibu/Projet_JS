@@ -107,6 +107,7 @@
 
                     /*la ligne et son contenu*/
                     var tr = document.createElement('tr');
+                    tr.className = "tr";
                     var td1 = document.createElement('td');
                     td1.innerHTML = coup;
                     var td2 = document.createElement('td');
@@ -114,11 +115,14 @@
                     var td3 = document.createElement('td');
                     td3.innerHTML= money;
                     var td4 = document.createElement('td');
+                    
+                    //changement de couleur:
                     if(gain == -1){
                         td4.className = "loss";
                     }else{
                         td4.className="win";
                     }
+                    
                     td4.innerHTML = gain;
                     
                     tr.appendChild(td1);
@@ -137,15 +141,7 @@
                 coup = 1 ;
                 money = 10;
                 totalCoup = 10;
-                
-                var mesTd = document.querySelectorAll('td');
-                var mesTr = document.querySelectorAll('tr');
-                for(var i = 0 ; i < mesTd.length; i++){ 
-                    mesTd[i].remove();
-                    for(var j=0;j<mesTr.length; j++){
-                        mesTr[j].remove();
-                    }
-                }
+                tbody.innerHTML=" ";
                 
             });
             
