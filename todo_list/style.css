@@ -1,0 +1,61 @@
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #faf2e8;
+    color: #001b48;
+}
+header{
+    width: 100%;
+    padding-bottom: 15px;
+}
+h1{
+    text-align: center;
+}
+#title , #datum {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;   
+}
+#datum{
+    width: 30%;
+}
+
+main{
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+button{
+    border: 1px solid #001b48;
+    background: #001b48;
+    color: #fff;
+}
+#newToDo{
+    width: 100%;
+    padding-top: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+
+}
+
+table{
+    width: 100%;
+    background-color: #fff;
+}
+#table{
+    padding-top: 20px;
+    margin-left: 18%;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    /*align-items: center;*/
+}
+
+.table-content{
+    width: 95%;
+    padding: 5px;
+    border: 1px solid;
+}

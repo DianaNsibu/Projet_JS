@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Liste</title>
+        <link rel="stylesheet" href="./style.css">
+    </head>
+    <body>
+        <header>
+            <h1>To Do List</h1>
+            <div id="title">
+                <button id="previousButton"></button>
+                <h2 id="datum"></h2>
+                <button id="nextButton"></button>
+            </div>
+
+        </header>
+        <main>
+            <div id="newToDo">
+                <input type="text" id="inputText" placeholder="La tâche à ajouter">
+            </div>
+            <div id="table">
+                <table id="tableau">
+                    <thead>
+                        <tr>
+                            <th>Done</th>
+                            <th>To Do</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </main>
+        <script>
+            /*------------------------------- affichage au départ ----------------------------------*/
+            /*la date du jour*/
+            var da = new Date();
+            var jour = da.getDate();
+            var year = da.getFullYear();
+
+            /*correspondance jour et tableau*/
+            var day = da.getDay();  
+            var semaine = new Array('dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi');
+            var quel_jour = semaine[day];
+
+            var month = da.getMonth();
+            var mois = new Array ('Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre');
+            var quel_mois = mois[month];
+            var jour_mois = new Array(31,28,31,30,31,30,31,31,30,31,30,31);
+
+
+            /* dans le h2 */
+            var h3 = document.getElementById('datum');
+            var spanJour = document.createElement('span');
+            spanJour.className = "jour";
+            spanJour.innerHTML =jour;
+            var spanDay = document.createElement('span');
+            spanDay.className ="day";
+            spanDay.innerHTML=quel_jour;
+            var spanMonth = document.createElement('span');
+            spanMonth.className = 'mois';
+            spanMonth.innerHTML=quel_mois;
+            var spanYear = document.createElement('span');
+            spanYear.className = 'year';
+            spanYear.innerHTML=year;
+
+            h3.appendChild(spanDay);
+            h3.appendChild(spanJour);
+            h3.appendChild(spanMonth);
+            h3.appendChild(spanYear);
+
+            /*les boutons*/
+            var nextDay = document.getElementById('nextButton');
+            var previousDay = document.getElementById('previousButton');
+            var newButton = document.createElement('button');
+            newButton.className = "buttonNew";
+            newButton.textContent = "Nouvelle tâche";
+
+            /*en-tête*/
+            var headButton = document.getElementById('newToDo');
+            headButton.appendChild(newButton);
+
+
+            /*le tableau*/
+            var table = document.getElementById('tableau');
+            var tableContent = document.getElementById('table');
+            var tbody = document.querySelector('tbody');
+
+            /*-----------------------------------------------modifier la date----------------------------------------------- */
+
+
+            /*-----------------gestion date previous day-------------------*/
+
+            previousDay.textContent = '\u003c';
+
+            previousDay.addEventListener('click',function(){
+                var newDay = jour - 1 ; 
+                var newJourSemaine =  day - 1 ;
+
+
+                if( newDay > 0){
+                    /* modifier le jour */
+                    jour -= 1 ;
+                    spanJour.innerHTML = newDay;
+
+                    /*modifier jour/semaine*/
+                    jourSemaine( newJourSemaine);
+                } 
+
+                else {
+                    /*récupérer le nombre de jour du mois suivant */
+                    var newMonth = month - 1 ;
+                    jour  = jour_mois[newMonth];
+                    spanJour.innerHTML = jour;
+
+                    /*modifier jour/semaine*/
+                    jourSemaine( newJourSemaine);
+
+                    /*modifier les mois*/
+                    if(month > 0){
+                        /*le nouveaux mois à afficher*/
+                        quel_mois = mois[newMonth];
+                        spanMonth.innerHTML=quel_mois;
+                        month -= 1 ;
+
+                    }else {
+                        /*modifier le month*/
+                        newMonth = mois.length - 1;
+                        quel_mois = mois[newMonth];
+                        spanMonth.innerHTML=quel_mois;
+                        month = mois.length ; 
+                        month -= 1 ;
+
+                        /*affichage du jour si le month = 0 */
+                        jour  = jour_mois[newMonth];
+                        spanJour.innerHTML = jour;
+
+                        /*modifier l'année */
+                        year -= 1 ;
+                        spanYear.innerHTML=year;
+                    }
+                }
+
+                /*le tableau est remis à zéro*/
+                resetTable();
+
+            });
+
+
+
+            /*-----------------------gestion date next day--------------------------------- */
+
+            nextDay.textContent = '\u003e';
+
+            nextDay.addEventListener('click',function(){
+                var nextDay = jour + 1 ; 
+                var nextJourSemaine =  day + 1 ;
+
+                var jour_total_mois = jour_mois[month];
+
+
+
+                if(nextDay <= jour_total_mois){
+                    jour += 1 ;
+                    spanJour.innerHTML = nextDay;
+
+                    nextSemaine (nextJourSemaine);
+                }
+                else{
+                    var nextMonth;
+
+                    /*le nouveau jour */
+                    jour = 1 ;
+                    spanJour.innerHTML = jour;
+
+                    /*nouveau jour_semaine*/
+                    nextSemaine (nextJourSemaine);
+
+                    /*on passe au mois suivant */ 
+                    if(month < mois.length-1 ){
+                        nextMonth = month + 1 ;
+                        quel_mois = mois[nextMonth];
+                        spanMonth.innerHTML=quel_mois;
+                        month += 1 ;
+                    }
+                    /*on change le mois et l'année*/
+                    else{
+                        nextMonth = 0;
+                        /*modifier le month*/
+                        quel_mois = mois[nextMonth];
+                        spanMonth.innerHTML=quel_mois;
+                        month = 0 ; 
+
+                        /*modifier l'année */
+                        year += 1 ;
+                        spanYear.innerHTML=year;
+                    }
+
+                }
+
+                /*le tableau est remis à zéro*/
+                resetTable();
+
+            });
+
+
+
+            /*-----------------------------------------------------Ajout nouvelle tâche -------------------------------------------------------*/
+            var input = document.getElementById('inputText');
+            newButton.addEventListener('click',function(){
+                newTache();
+            });
+
+            /*------------------------------------------les fonctions-------------------------------------------------------------------------*/
+
+            /*jour/semaine previous*/
+            function jourSemaine (newJourSemaine){
+
+                if( newJourSemaine >= 0){
+                    quel_jour = semaine[newJourSemaine];
+                    spanDay.innerHTML=quel_jour;
+                    day -= 1;
+                }
+                else {
+                    newJourSemaine = semaine.length + newJourSemaine;
+                    quel_jour = semaine[newJourSemaine];
+                    spanDay.innerHTML=quel_jour; 
+                    day = semaine.length;
+                    day -= 1 ;
+                }  
+
+            }
+
+            /*jour/semaine next */
+            function nextSemaine (nextJourSemaine){
+
+                if( nextJourSemaine < semaine.length){
+                    quel_jour = semaine[nextJourSemaine];
+                    spanDay.innerHTML=quel_jour;
+                    day += 1;
+                }else {
+                    nextJourSemaine = semaine.length - nextJourSemaine;
+                    quel_jour = semaine[nextJourSemaine];
+                    spanDay.innerHTML=quel_jour; 
+                    day = 0;
+                }  
+            }
+
+            /*nouvelle tache*/
+            function newTache(){
+                if(input.value){
+                    /*colonne 1*/
+                    var colCheck = document.createElement('td');
+                    colCheck.className = "checkbox";
+                    var checkbox = document.createElement('input');
+                    checkbox.setAttribute('type','checkbox');
+                    colCheck.appendChild(checkbox);
+
+                    /*colonne 2*/
+                    var colContent = document.createElement('td');
+                    colContent.className = "table-content";
+                    colContent.textContent = input.value ;
+
+                    /*ajout à la ligne*/
+                    var ligne = document.createElement('tr');
+                    ligne.className = "ligne-content";
+                    ligne.appendChild(colCheck);
+                    ligne.appendChild(colContent);
+
+                    /*ajout à la table*/
+                    tbody.appendChild(ligne);
+                }  
+                input.setAttribute("placeholder", 'nouvelle tâche') ; 
+            } 
+
+            /*le tableau est mis à zéro*/
+            function resetTable(){   
+                tbody.innerHTML = " ";
+            }
+
+
+
+
+
+
+        </script>
+    </body>
+</html>
